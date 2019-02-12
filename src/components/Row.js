@@ -1,20 +1,20 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
-const Row = ({rows, handler, rowNumber}) => {
+const Row = ({rows, handler, col}) => {
     const fields = rows.map((field, index) => {
         return (
             <td key={index}>
-                <label className={field.frog}>
-                    <input type="checkbox" id={field.id} name={field.frog} data={field.frog} value={field.checked} onChange={handler}/>
+                <label name={col}>
+                    <input type="checkbox" id={field} />
                 </label>
             </td>
         );
     });
 
     return (
-        <tr id={rowNumber} >
+        <Fragment>
             {fields}
-        </tr>
+        </Fragment>
     );
 }
 
