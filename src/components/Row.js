@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Row = ({rows, handler}) => {
+const Row = ({rows, handler, rowNumber}) => {
     const fields = rows.map((field, index) => {
         return (
             <td key={index}>
@@ -12,7 +12,7 @@ const Row = ({rows, handler}) => {
     });
 
     return (
-        <tr>
+        <tr id={rowNumber} >
             {fields}
         </tr>
     );

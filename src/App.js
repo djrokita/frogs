@@ -50,7 +50,20 @@ class App extends Component {
         checked: false
       }
     ],
-    selectedFrogs: ''
+    frogs: [
+      {
+        id: 1,
+        sex: 'male',
+        row: 1,
+        column: 1
+      },
+      {
+        id: 2,
+        sex: 'female',
+        row: 1,
+        column: 2
+      }
+    ]
   }
 
   frogsMoveHandler = (e) => {
