@@ -3,6 +3,27 @@ import Row from './Row';
 
 const Lake = (props) => {
     const { frogs } = props;
+    const rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const columns = [1, 2, 3, 4, 5, 6];
+
+    const row = rows.map((num, index) => {
+        return (
+            <td key={index}>
+                <label>
+                    <input type="checkbox" id={num} />
+                </label>
+            </td>
+        );
+    });
+
+    const col = columns.map((num, index) => {
+        return (
+            <tr>
+                {row}
+            </tr>
+        );
+    });
+
     return (
         <table id="lake">
             <thead>
@@ -11,12 +32,7 @@ const Lake = (props) => {
                 </tr>
             </thead>
             <tbody>
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={1} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={2} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={3} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={4} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={5} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={6} />
+                {col}
             </tbody>
         </table>
     );

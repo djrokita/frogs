@@ -6,50 +6,6 @@ import Legend from './components/Legend';
 class App extends Component {
 
   state = {
-    rows: [
-      {
-        id: '1',
-        frog: 'frog male',
-        checked: false
-      },
-      {
-        id: '2',
-        frog: 'frog female',
-        checked: false
-      },
-      {
-        id: '3',
-        checked: false
-      },
-      {
-        id: '4',
-        checked: false
-      },
-      {
-        id: '5',
-        checked: false
-      },
-      {
-        id: '6',
-        checked: false
-      },
-      {
-        id: '7',
-        checked: false
-      },
-      {
-        id: '8',
-        checked: false
-      },
-      {
-        id: '9',
-        checked: false
-      },
-      {
-        id: '10',
-        checked: false
-      }
-    ],
     frogs: [
       {
         id: 1,
