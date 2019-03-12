@@ -12,32 +12,35 @@ class App extends Component {
         row: 1,
         col: 1,
         sex: 'frog male'
-      }
-    ]
+      },
+    ],
+    selectedFrogId: null,
+    selectedField: {
+      row: null,
+      col: null
+    }
   }
 
-  // frogsMoveHandler = (e) => {
-  //   const {id} = e.target;
-  //   const { rows } = this.state;
-  //   let chengedRows = rows.map(item => {
-  //     if (item.id === id) return {id, checked: true};
-  //     return item;
-  //   });
-  //   this.setState({rows: chengedRows});
-  // }
+  inputHandler = (row, col, selectedFrogId) => {
+    const selectedField = {row, col};
+    if (selectedFrogId) this.setState({selectedField, selectedFrogId});
+    else this.setState({selectedField});
+  }
 
-  // frogsJumpSubmit = (e) => {
-  //   const rows = this.state.rows.map(item => {
-  //     if (item.checked) return {id: item.id, frog: 'frog male', checked: false};
-  //     return {id: item.id, checked: false};
-  //   });
-  //   this.setState({rows});
-  // }
+  frogsJumpSubmit = () => {
+    const { selectedField, selectedFrogId, frogs } = this.state;
+    if (selectedFrogId) {
+      const frogsArr = frogs.filter(frog => frog.id !== selectedFrogId);
+      const movedFrogsArr = [...frogsArr, {id: selectedFrogId, row: selectedField.row, col: selectedField.col, sex: 'frog male'}];
+      this.setState({frogs: movedFrogsArr});
+    }
+  }
 
   render() {
+    const { selectedField } = this.state;
     return (
       <Fragment>
-        <Lake frogs={this.state.frogs} moveHandler={this.frogsMoveHandler}/>
+        <Lake frogs={this.state.frogs} handler={this.inputHandler} moveHandler={this.frogsMoveHandler} selectedField={selectedField}/>
         <Legend jump={this.frogsJumpSubmit} />
       </Fragment>
     );

@@ -5,25 +5,24 @@ class Cell extends Component {
     col = this.props.col;
 
     state = {
-        hasFrog: false,
+        // frog: {id: 0}
     }
 
     static getDerivedStateFromProps(props, state) {
         const [ frog ]  = props.frogs.filter(frog => frog.col === props.col);
-		console.log('TCL: Cell -> staticgetDerivedStateFromProps -> frog', frog);
+        // if (frog) return { frog };
+        // else return { frog: {id: 0}};
         return { frog };
     }
 
     render() {
-        // console.log('cell-state', this.state.frog);
-        const {handler, col} = this.props;
+        const { handler, col, selected } = this.props;
         const { frog } = this.state;
 
         return (
             <td>
                 <label name={col} className={frog ? frog.sex : ''}>
-                    <input type="checkbox" />
-                    {this.row}, {this.col}
+                    <input type="checkbox" onChange={() => handler(this.row, this.col, frog ? frog.id : 0)} checked={selected}/>
                 </label>
             </td>
         );
