@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react'
 
-const Row = ({rows, handler, col}) => {
-    const fields = rows.map((field, index) => {
+const Row = ({cols, handler, col, frogCol}) => {
+    console.log('TCL: Row -> rows', cols);
+
+    const fields = cols.map((field, index) => {
         return (
             <td key={index}>
                 <label name={col}>
