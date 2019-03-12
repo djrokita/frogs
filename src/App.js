@@ -10,7 +10,8 @@ class App extends Component {
       {
         id: 1,
         row: 1,
-        col: 1
+        col: 1,
+        sex: 'frog male'
       }
     ]
   }

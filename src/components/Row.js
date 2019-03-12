@@ -1,10 +1,13 @@
 import React from 'react'
-import Cell from './Cell';
+import Cell from './Cell'
 
-const Row = ({cols, handler}) => {
+const Row = ({cols, handler, row, frogs}) => {
 
-    const fields = cols.map((field, index) => {
-        return <Cell key={index}/>;
+    const frogsInRow = frogs.filter(frog => frog.row === row);
+	console.log('TCL: Row -> frogsInRow', frogsInRow);
+
+    const fields = cols.map((num, index) => {
+        return <Cell key={index} row={row} col={num} frogs={frogsInRow}/>;
     });
 
     return (

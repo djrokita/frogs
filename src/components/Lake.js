@@ -7,7 +7,7 @@ const Lake = (props) => {
     const rowsNumbers = [1, 2, 3, 4, 5, 6];
 
     const rowsGrid = rowsNumbers.map((num, index) => {
-        return <Row cols={columnsNumbers} />
+        return <Row cols={columnsNumbers} key={index} row={num} frogs={frogs} />
     });
 
     return (
