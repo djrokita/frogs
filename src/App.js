@@ -9,8 +9,8 @@ class App extends Component {
     frogs: [
       {
         id: 1,
-        row: 4,
-        col: 2
+        row: 1,
+        col: 1
       }
     ]
   }

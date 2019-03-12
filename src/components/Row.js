@@ -1,22 +1,16 @@
-import React, { Fragment } from 'react'
+import React from 'react'
+import Cell from './Cell';
 
-const Row = ({cols, handler, col, frogCol}) => {
-    console.log('TCL: Row -> rows', cols);
+const Row = ({cols, handler}) => {
 
     const fields = cols.map((field, index) => {
-        return (
-            <td key={index}>
-                <label name={col}>
-                    <input type="checkbox" id={field} />
-                </label>
-            </td>
-        );
+        return <Cell key={index}/>;
     });
 
     return (
-        <Fragment>
+        <tr>
             {fields}
-        </Fragment>
+        </tr>
     );
 }
 
