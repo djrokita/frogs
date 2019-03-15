@@ -4,25 +4,30 @@ class Cell extends Component {
     row = this.props.row;
     col = this.props.col;
 
-    state = {
-        // frog: {id: 0}
-    }
+    state = {}
 
     static getDerivedStateFromProps(props, state) {
         const [ frog ]  = props.frogs.filter(frog => frog.col === props.col);
-        // if (frog) return { frog };
-        // else return { frog: {id: 0}};
         return { frog };
     }
 
     render() {
-        const { handler, col, selected } = this.props;
+        const { handler, col, selected, rowMoveRange, colMoveRange } = this.props;
         const { frog } = this.state;
+
+        const setRange = () => {
+            if (rowMoveRange && colMoveRange) return 'jump_range';
+            else return '';
+        };
 
         return (
             <td>
-                <label name={col} className={frog ? frog.sex : ''}>
-                    <input type="checkbox" onChange={() => handler(this.row, this.col, frog ? frog.id : 0)} checked={selected}/>
+                <label name={col} className={frog ? frog.sex : '' || setRange()}>
+                    <input
+                        type="checkbox"
+                        onChange={() => handler(this.row, this.col, frog ? frog.id : 0)} checked={selected}
+                        disabled={!frog && !setRange()}
+                        />
                 </label>
             </td>
         );

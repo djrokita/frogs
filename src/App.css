@@ -130,3 +130,7 @@ button {
 .frog.male:after {
 	background-color: #0074D9;
 }
+
+.jump_range {
+	background-color: #c5f7cc;
+}
