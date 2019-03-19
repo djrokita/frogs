@@ -17,7 +17,7 @@ class App extends Component {
         id: 2,
         row: 1,
         col: 2,
-        sex: 'frog male'
+        sex: 'frog female'
       },
     ],
     selectedFrogId: null,
@@ -34,10 +34,13 @@ class App extends Component {
   inputHandler = (row, col, selectedFrogId) => {
     const selectedField = {row, col};
     if (selectedFrogId) {
-      let rowMaxMove = row + 3 < 6 ? row + 3 : 6;
-      let rowMinMove = row - 3 < 1 ? 1 : row - 3;
-      let colMaxMove = col + 3 < 10 ? col + 3 : 10;
-      let colMinMove = col - 3 < 1 ? 1 : col - 3;
+      const { frogs } = this.state;
+      let [ selectedFrog ] = frogs.filter(frog => frog.id === selectedFrogId);
+      const range = selectedFrog.sex === 'frog male' ? 3 : 2;
+      let rowMaxMove = row + range < 6 ? row + range : 6;
+      let rowMinMove = row - range < 1 ? 1 : row - range;
+      let colMaxMove = col + range < 10 ? col + range : 10;
+      let colMinMove = col - range < 1 ? 1 : col - range;
       let rowMoveRange = [];
       let colMoveRange = [];
       for (let i = rowMinMove; i <= rowMaxMove; i++) {
@@ -58,8 +61,9 @@ class App extends Component {
   frogsJumpSubmit = () => {
     const { selectedField, selectedFrogId, frogs } = this.state;
     if (selectedFrogId) {
+      let [ selectedFrog ] = frogs.filter(frog => frog.id === selectedFrogId);
       const frogsArr = frogs.filter(frog => frog.id !== selectedFrogId);
-      const movedFrogsArr = [...frogsArr, {id: selectedFrogId, row: selectedField.row, col: selectedField.col, sex: 'frog male'}];
+      const movedFrogsArr = [...frogsArr, {id: selectedFrogId, row: selectedField.row, col: selectedField.col, sex: selectedFrog.sex}];
       this.setState({
         frogs: movedFrogsArr,
         moveableFields: {
