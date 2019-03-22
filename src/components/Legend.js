@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Legend = ({jump}) => {
+const Legend = ({jump, reproduce, action}) => {
 
     return (
 		<div className="legend">
@@ -17,11 +17,10 @@ const Legend = ({jump}) => {
 			</ul>
 
 			<h3>Actions</h3>
-			<button type="button" id="jump" onClick={jump}>Jump</button>
-			<button type="button" id="reproduce">Reproduce</button>
+			<button type="button" id="jump" onClick={jump} disabled={action !== 'jump' ? true : false}>Jump</button>
+			<button type="button" id="reproduce" onClick={reproduce} disabled={action !== 'reproduce' ? true : false}>Reproduce</button>
 		</div>
     );
-
 }
 
 export default Legend;

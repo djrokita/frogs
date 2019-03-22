@@ -11,13 +11,15 @@ class App extends Component {
         id: 1,
         row: 1,
         col: 1,
-        sex: 'frog male'
+        sex: 'frog male',
+        reproduceFields: []
       },
       {
         id: 2,
         row: 1,
         col: 2,
-        sex: 'frog female'
+        sex: 'frog female',
+        reproduceFields: []
       },
     ],
     selectedFrogId: null,
@@ -28,13 +30,33 @@ class App extends Component {
     moveableFields: {
       rowMoveRange: [],
       colMoveRange: []
+    },
+    action: null
+  }
+
+  setReproduceFields(frog) {
+    const { row, col } = frog;
+    let rowMaxReproduce = row + 1 < 6 ? row + 1 : 6;
+    let rowMinReproduce = row - 1 < 1 ? 1 : row - 1;
+    let colMaxReproduce = col + 1 < 10 ? col + 1 : 10;
+    let colMinReproduce = col - 1 < 1 ? 1 : col - 1;
+    let reproduceFields = [];
+    for (let i = rowMinReproduce; i <= rowMaxReproduce; i++) {
+      let obj = {row: i};
+      for (let j = colMinReproduce; j <= colMaxReproduce; j++) {
+        obj = {...obj, col: j }
+        reproduceFields = [...reproduceFields, obj];
+      }
     }
+    return reproduceFields.filter(field => {
+      return field.row !== row || field.col !== col;
+    });
   }
 
   inputHandler = (row, col, selectedFrogId) => {
     const selectedField = {row, col};
-    if (selectedFrogId) {
-      const { frogs } = this.state;
+    const { frogs } = this.state;
+    if (selectedFrogId && !this.state.selectedFrogId) {
       let [ selectedFrog ] = frogs.filter(frog => frog.id === selectedFrogId);
       const range = selectedFrog.sex === 'frog male' ? 3 : 2;
       let rowMaxMove = row + range < 6 ? row + range : 6;
@@ -52,7 +74,20 @@ class App extends Component {
       this.setState({
         selectedField,
         selectedFrogId,
-        moveableFields: {rowMoveRange, colMoveRange}
+        moveableFields: {rowMoveRange, colMoveRange},
+        action: 'jump'
+      });
+    }
+    if (selectedFrogId && this.state.selectedFrogId) {
+      let [ firstSelectedFrog ] = frogs.filter(frog => frog.id === this.state.selectedFrogId);
+      let [ secondSelectedFrog ] = frogs.filter(frog => frog.id === selectedFrogId);
+      const { reproduceFields } = firstSelectedFrog;
+      let parentFrog = reproduceFields.filter(field => {
+        return field.row === secondSelectedFrog.row && field.col === secondSelectedFrog.col;
+      });
+      this.setState({
+        selectedField,
+        action: 'reproduce'
       });
     }
     else this.setState({selectedField});
@@ -63,9 +98,17 @@ class App extends Component {
     if (selectedFrogId) {
       let [ selectedFrog ] = frogs.filter(frog => frog.id === selectedFrogId);
       const frogsArr = frogs.filter(frog => frog.id !== selectedFrogId);
-      const movedFrogsArr = [...frogsArr, {id: selectedFrogId, row: selectedField.row, col: selectedField.col, sex: selectedFrog.sex}];
+      const movedFrog = {
+        id: selectedFrogId,
+        row: selectedField.row,
+        col: selectedField.col,
+        sex: selectedFrog.sex,
+        reproduceFields: this.setReproduceFields(selectedFrog)
+      }
+      const movedFrogsArr = [...frogsArr, movedFrog];
       this.setState({
         frogs: movedFrogsArr,
+        selectedFrogId: null,
         moveableFields: {
           rowMoveRange: [],
           colMoveRange: []
@@ -74,8 +117,21 @@ class App extends Component {
     }
   }
 
+  frogReproduceSubmit = () => {
+    if (this.state.action === 'reproduce') {
+      const babyFrog = {
+        id: 3,
+        row: 1,
+        col: 10,
+        sex: 'frog male'
+      }
+      const frogs = [...this.state.frogs, babyFrog];
+      this.setState({frogs});
+    }
+  }
+
   render() {
-    const { selectedField, moveableFields } = this.state;
+    const { selectedField, moveableFields, action } = this.state;
     return (
       <Fragment>
         <Lake frogs={this.state.frogs}
@@ -84,7 +140,7 @@ class App extends Component {
               selectedField={selectedField}
               moveableFields={moveableFields}
               />
-        <Legend jump={this.frogsJumpSubmit} />
+        <Legend jump={this.frogsJumpSubmit} reproduce={this.frogReproduceSubmit} action={action} />
       </Fragment>
     );
   }
