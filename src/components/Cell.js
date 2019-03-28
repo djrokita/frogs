@@ -14,7 +14,6 @@ class Cell extends Component {
     render() {
         const { handler, col, selected, rowMoveRange, colMoveRange } = this.props;
         const { frog } = this.state;
-
         const setRange = () => {
             if (rowMoveRange && colMoveRange) return 'jump_range';
             else return '';
