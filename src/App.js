@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import './App.css';
 import Lake from './components/Lake';
 import Legend from './components/Legend';
-import {setBabyFrogGender, setBabyFrogId} from './utils';
+import {setBabyFrogGender, setBabyFrogId, setBabyField} from './utils';
 
 class App extends Component {
 
@@ -17,12 +17,13 @@ class App extends Component {
       },
       {
         id: 2,
-        row: 6,
-        col: 10,
+        row: 1,
+        col: 2,
         sex: 'frog female',
         reproduceFields: []
       },
     ],
+    fieldsForBaby: null,
     selectedFrogId: null,
     selectedField: {
       row: null,
@@ -32,11 +33,11 @@ class App extends Component {
       rowMoveRange: [],
       colMoveRange: []
     },
-    action: null
+    action: null,
+    msg: ''
   }
 
   setReproduceFields(row, col) {
-    // const { row, col } = frog;
     let rowMaxReproduce = row + 1 < 6 ? row + 1 : 6;
     let rowMinReproduce = row - 1 < 1 ? 1 : row - 1;
     let colMaxReproduce = col + 1 < 10 ? col + 1 : 10;
@@ -59,20 +60,37 @@ class App extends Component {
   }
 
   checkReproduceRange(frog1, frog2) {
-    let frogInRange = frog1.reproduceFields.filter(field => {
-      // debugger
-      return field.row === frog2.row && field.col === frog2.col;
-    });
+    let frogInRange = [];
+    if (frog1.reproduceFields.length) {
+      frogInRange = frog1.reproduceFields.filter(field => {
+        return field.row === frog2.row && field.col === frog2.col;
+      });
+    }
+    else {
+      frogInRange = frog2.reproduceFields.filter(field => {
+        return field.row === frog1.row && field.col === frog1.col;
+      });
+    }
     return frogInRange.length;
   }
 
+  searchForBabyFrogPlace(parent) {
+    if (parent.sex === 'frog female') {
+      return parent.reproduceFields.filter(field => {
+        let frogField = {};
+        this.state.frogs.forEach(frog => {
+          frogField = {row: frog.row, col: frog.col};
+          return frogField;
+        });
+        return field.row !== 1 || field.col !== 1;
+      });
+    }
+  } 
 
   inputHandler = (row, col, selectedFrogId) => {
     const selectedField = {row, col};
     const { frogs } = this.state;
     if (selectedFrogId && !this.state.selectedFrogId) {
-      console.log('selectedFrogId', selectedFrogId);
-      console.log('selectedFrogId', this.state.selectedFrogId);
       let [ selectedFrog ] = frogs.filter(frog => frog.id === selectedFrogId);
       const range = selectedFrog.sex === 'frog male' ? 3 : 2;
       let rowMaxMove = row + range < 6 ? row + range : 6;
@@ -98,11 +116,12 @@ class App extends Component {
       let [ firstSelectedFrog ] = frogs.filter(frog => frog.id === this.state.selectedFrogId);
       let [ secondSelectedFrog ] = frogs.filter(frog => frog.id === selectedFrogId);
       const isHeteroParents = this.checkParentsGender(firstSelectedFrog, secondSelectedFrog);
-      // const { reproduceFields } = firstSelectedFrog;
       const parentFrog = this.checkReproduceRange(firstSelectedFrog, secondSelectedFrog);
+      const fieldsForBaby = firstSelectedFrog.sex === 'frog female' ? this.searchForBabyFrogPlace(firstSelectedFrog) : this.searchForBabyFrogPlace(secondSelectedFrog);
       if (isHeteroParents && parentFrog) {
         this.setState({
           selectedField,
+          fieldsForBaby,
           action: 'reproduce'
         });
       }
@@ -140,10 +159,12 @@ class App extends Component {
 
   frogReproduceSubmit = () => {
     if (this.state.action === 'reproduce') {
+      const babyField = setBabyField(this.state.fieldsForBaby);
+      const { row, col } = this.state.fieldsForBaby[babyField];
       const babyFrog = {
         id: setBabyFrogId(this.state.frogs),
-        row: 1,
-        col: 10,
+        row,
+        col,
         sex: `frog ${setBabyFrogGender()}`
       };
       const frogs = [...this.state.frogs, babyFrog];
@@ -165,7 +186,6 @@ class App extends Component {
 
   render() {
     const { selectedField, moveableFields, action } = this.state;
-    console.log('state-frogs', this.state.frogs);
     return (
       <Fragment>
         <Lake frogs={this.state.frogs}

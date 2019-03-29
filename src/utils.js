@@ -6,3 +6,7 @@ export const setBabyFrogGender = () => {
 export const setBabyFrogId = (frogs) => {
     return frogs.length + 1;
 };
+
+export const setBabyField = (fieldsArray) => {
+    return Math.floor(Math.random(0, 1) * (fieldsArray.length - 1));
+};
