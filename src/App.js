@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react';
 import './App.css';
 import Lake from './components/Lake';
 import Legend from './components/Legend';
-import {setBabyFrogGender, setBabyFrogId, setBabyField} from './utils';
+import {setBabyFrogGender, setBabyFrogId, setBabyField, setBabyFrogCharacteristics} from './utils';
+import * as init from './initialState';
 
 class App extends Component {
 
@@ -13,6 +14,7 @@ class App extends Component {
         row: 1,
         col: 1,
         sex: 'frog male',
+        characteristics: ['tall', 'slim'],
         reproduceFields: []
       },
       {
@@ -20,6 +22,7 @@ class App extends Component {
         row: 1,
         col: 2,
         sex: 'frog female',
+        characteristics: ['shart', 'fat'],
         reproduceFields: []
       },
     ],
@@ -133,10 +136,10 @@ class App extends Component {
       let [ selectedFrog ] = frogs.filter(frog => frog.id === selectedFrogId);
       const frogsArr = frogs.filter(frog => frog.id !== selectedFrogId);
       const movedFrog = {
+        ...selectedFrog,
         id: selectedFrogId,
         row,
         col,
-        sex: selectedFrog.sex,
         reproduceFields: this.setReproduceFields(row, col)
       }
       const movedFrogsArr = [...frogsArr, movedFrog];
@@ -165,6 +168,7 @@ class App extends Component {
           row,
           col,
           reproduceFields: [],
+          characteristics: setBabyFrogCharacteristics(init.height, init.weight),
           sex: `frog ${setBabyFrogGender()}`
         };
         const frogs = [...this.state.frogs, babyFrog];
