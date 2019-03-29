@@ -74,16 +74,14 @@ class App extends Component {
     return frogInRange.length;
   }
 
-  searchForBabyFrogPlace(parent) {
-    if (parent.sex === 'frog female') {
-      return parent.reproduceFields.filter(field => {
-        let frogField = {};
-        this.state.frogs.forEach(frog => {
-          frogField = {row: frog.row, col: frog.col};
-          return frogField;
-        });
-        return field.row !== 1 || field.col !== 1;
+  searchForBabyFrogPlace({sex, reproduceFields}) {
+    if (sex === 'frog female') {
+      this.state.frogs.forEach(frog => {
+        reproduceFields = reproduceFields.filter(field => {
+          return field.row !== frog.row || field.col !== frog.col;
+        })
       });
+      return reproduceFields;
     }
   } 
 
@@ -159,33 +157,51 @@ class App extends Component {
 
   frogReproduceSubmit = () => {
     if (this.state.action === 'reproduce') {
-      const babyField = setBabyField(this.state.fieldsForBaby);
-      const { row, col } = this.state.fieldsForBaby[babyField];
-      const babyFrog = {
-        id: setBabyFrogId(this.state.frogs),
-        row,
-        col,
-        sex: `frog ${setBabyFrogGender()}`
-      };
-      const frogs = [...this.state.frogs, babyFrog];
-      this.setState({
-        frogs,
-        selectedField: {
-          row: null,
-          col: null
-        },
-        selectedFrogId: null,
-        moveableFields: {
-          rowMoveRange: [],
-          colMoveRange: []
-        },
-        action: null
-      });
+      if (this.state.fieldsForBaby.length) {
+        const babyField = setBabyField(this.state.fieldsForBaby);
+        const { row, col } = this.state.fieldsForBaby[babyField];
+        const babyFrog = {
+          id: setBabyFrogId(this.state.frogs),
+          row,
+          col,
+          reproduceFields: [],
+          sex: `frog ${setBabyFrogGender()}`
+        };
+        const frogs = [...this.state.frogs, babyFrog];
+        this.setState({
+          frogs,
+          selectedField: {
+            row: null,
+            col: null
+          },
+          selectedFrogId: null,
+          moveableFields: {
+            rowMoveRange: [],
+            colMoveRange: []
+          },
+          action: null,
+          msg: ''
+        });
+      }
+      else {
+        this.setState({
+          selectedField: {
+            row: null,
+            col: null
+          },
+          selectedFrogId: null,
+          moveableFields: {
+            rowMoveRange: [],
+            colMoveRange: []
+          },
+          action: null,
+          msg: 'No place for another baby :('}, );
+      }
     }
   }
 
   render() {
-    const { selectedField, moveableFields, action } = this.state;
+    const { selectedField, moveableFields, action, msg } = this.state;
     return (
       <Fragment>
         <Lake frogs={this.state.frogs}
@@ -194,7 +210,7 @@ class App extends Component {
               selectedField={selectedField}
               moveableFields={moveableFields}
               />
-        <Legend jump={this.frogsJumpSubmit} reproduce={this.frogReproduceSubmit} action={action} />
+        <Legend jump={this.frogsJumpSubmit} reproduce={this.frogReproduceSubmit} action={action} msg={msg}/>
       </Fragment>
     );
   }
