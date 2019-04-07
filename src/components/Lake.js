@@ -1,8 +1,24 @@
-import React from 'react'
+import React from 'react';
 import Row from './Row';
+import { columnsNumbers,  rowsNumbers } from './../initialState';
 
-const Lake = (props) => {
-    const { frogs } = props;
+const Lake = ({frogs, handler, selectedField, moveableFields}) => {
+    const { rowMoveRange, colMoveRange } = moveableFields;
+    const isRowInRange = (row) => rowMoveRange.find((val) => row === val);
+
+    const rowsGrid = rowsNumbers.map((num, index) => {
+        return <Row cols={columnsNumbers}
+                    key={index}
+                    row={num}
+                    frogs={frogs}
+                    handler={handler}
+                    selectedField={selectedField}
+                    selectedRow={selectedField.row === num ? true : false}
+                    rowMoveRange={isRowInRange(num)}
+                    colMoveRange={colMoveRange}
+                />
+    });
+
     return (
         <table id="lake">
             <thead>
@@ -11,12 +27,7 @@ const Lake = (props) => {
                 </tr>
             </thead>
             <tbody>
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={1} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={2} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={3} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={4} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={5} />
-                <Row rows={props.rows} handler={props.moveHandler} rowNumber={6} />
+                {rowsGrid}
             </tbody>
         </table>
     );

@@ -1,18 +1,25 @@
 import React from 'react'
+import Cell from './Cell'
 
-const Row = ({rows, handler, rowNumber}) => {
-    const fields = rows.map((field, index) => {
-        return (
-            <td key={index}>
-                <label className={field.frog}>
-                    <input type="checkbox" id={field.id} name={field.frog} data={field.frog} value={field.checked} onChange={handler}/>
-                </label>
-            </td>
-        );
+const Row = ({cols, handler, row, frogs, selectedField, selectedRow, rowMoveRange, colMoveRange}) => {
+    const frogsInRow = frogs.filter(frog => frog.row === row);
+    const isColInRange = (col) => colMoveRange.find((val) => col === val);
+    const fields = cols.map((num, index) => {
+        return <Cell
+            key={index}
+            row={row}
+            col={num}
+            frogs={frogsInRow}
+            handler={handler}
+            selectedFieled={selectedField}
+            selected={selectedRow && selectedField.col === num}
+            rowMoveRange={!!rowMoveRange}
+            colMoveRange={isColInRange(num)}
+            />;
     });
 
     return (
-        <tr id={rowNumber} >
+        <tr>
             {fields}
         </tr>
     );
