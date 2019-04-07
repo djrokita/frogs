@@ -1,4 +1,3 @@
-
 export const setReproduceFields = (row, col) => {
     let rowMaxReproduce = row + 1 < 6 ? row + 1 : 6;
     let rowMinReproduce = row - 1 < 1 ? 1 : row - 1;

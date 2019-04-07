@@ -41,7 +41,7 @@ class App extends Component {
   }
 
   searchForBabyFrogPlace({sex, reproduceFields}) {
-    if (sex === 'frog female') {
+    if (sex === 'frog female' && reproduceFields.length) {
       this.state.frogs.forEach(frog => {
         reproduceFields = reproduceFields.filter(field => {
           return field.row !== frog.row || field.col !== frog.col;
@@ -49,6 +49,7 @@ class App extends Component {
       });
       return reproduceFields;
     }
+    else this.setState({msg: 'You must move female first!'});
   } 
 
   inputHandler = (row, col, selectedFrogId) => {
@@ -71,7 +72,7 @@ class App extends Component {
       const isHeteroParents = checkParentsGender(firstSelectedFrog, secondSelectedFrog);
       const parentFrog = checkReproduceRange(firstSelectedFrog, secondSelectedFrog);
       const fieldsForBaby = firstSelectedFrog.sex === 'frog female' ? this.searchForBabyFrogPlace(firstSelectedFrog) : this.searchForBabyFrogPlace(secondSelectedFrog);
-      if (isHeteroParents && parentFrog) {
+      if (isHeteroParents && parentFrog && fieldsForBaby) {
         this.setState({
           selectedField,
           fieldsForBaby,
@@ -105,7 +106,8 @@ class App extends Component {
         moveableFields: {
           rowMoveRange: [],
           colMoveRange: []
-        }
+        },
+        msg: ''
       });
     }
   }
