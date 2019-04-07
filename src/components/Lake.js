@@ -1,9 +1,8 @@
 import React from 'react';
 import Row from './Row';
+import { columnsNumbers,  rowsNumbers } from './../initialState';
 
 const Lake = ({frogs, handler, selectedField, moveableFields}) => {
-    const columnsNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    const rowsNumbers = [1, 2, 3, 4, 5, 6];
     const { rowMoveRange, colMoveRange } = moveableFields;
     const isRowInRange = (row) => rowMoveRange.find((val) => row === val);
 
@@ -17,7 +16,7 @@ const Lake = ({frogs, handler, selectedField, moveableFields}) => {
                     selectedRow={selectedField.row === num ? true : false}
                     rowMoveRange={isRowInRange(num)}
                     colMoveRange={colMoveRange}
-                    />
+                />
     });
 
     return (
